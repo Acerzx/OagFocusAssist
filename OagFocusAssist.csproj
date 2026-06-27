@@ -1,0 +1,44 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <OutputType>Library</OutputType>
+    <RootNamespace>OagFocusAssist</RootNamespace>
+    <AssemblyName>OagFocusAssist</AssemblyName>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
+    <SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings>
+    <NoWarn>$(NoWarn);NU1701;NU1902;NU1903;CS0067</NoWarn>
+    <Nullable>disable</Nullable>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="NINA.Plugin" Version="3.2.0.9001" />
+    <PackageReference Include="NINA.WPF.Base" Version="3.2.0.9001" />
+    <PackageReference Include="NINA.Equipment" Version="3.2.0.9001" />
+    <PackageReference Include="NINA.Image" Version="3.2.0.9001" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Options.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Update="SequenceItems\OagManualFocusInstructionTemplate.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <PropertyGroup>
+      <PluginDir>C:\Users\istep\AppData\Local\NINA\Plugins\3.0.0\OagFocusAssist\</PluginDir>
+    </PropertyGroup>
+    <RemoveDir Directories="$(PluginDir)" />
+    <MakeDir Directories="$(PluginDir)" />
+    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(PluginDir)" />
+    <Copy SourceFiles="$(TargetDir)$(TargetName).pdb" DestinationFolder="$(PluginDir)"
+          Condition="Exists('$(TargetDir)$(TargetName).pdb')" ContinueOnError="true" />
+  </Target>
+</Project>
